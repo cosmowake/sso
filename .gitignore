@@ -1,0 +1,10 @@
+# config file
+/config/*
+
+# IDE and editor specific files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*~ 
