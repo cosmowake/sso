@@ -1,20 +1,76 @@
 # SSO Service
 
-🚀 A lightweight and secure Single Sign-On (SSO) microservice written in Go, using gRPC, JWT, and MongoDB.
+🚀 A modular and secure Single Sign-On (SSO) microservice written in Go, with gRPC support, MongoDB as a data store, and JWT-based authentication.
 
 ## Features
 
-- 🔐 User authentication with JWT
-- 🧬 gRPC API support for inter-service communication
-- ⚙️ YAML-based configuration
-- 💾 MongoDB database
-- 🧼 Clean project structure using cleanenv and Go modules
+- 🔐 Secure user authentication with JWT tokens
+- 📡 gRPC API for service-to-service communication
+- 💾 MongoDB storage
+- 📁 Configuration via YAML (`config/local.yaml`)
+- 🪵 Structured logging with `log/slog`
+- ♻️ Graceful shutdown with signal handling
+- ✅ Modular architecture following Clean Architecture principles
 
-## Technologies Used
+## Project Structure
 
-- Go 1.24
-- gRPC
-- MongoDB
-- JWT (`github.com/golang-jwt/jwt/v5`)
-- Cleanenv
-- grpc-contract (external gRPC definitions) https://github.com/cosmowake/grpc-contract
+```
+sso/
+├── cmd/
+│   └── sso/                # Entry point (main.go)
+├── config/                 # Configuration files (YAML)
+│   └── local.yaml
+├── internal/
+│   ├── app/                # Composition root / DI container
+│   ├── services/           # Business logic (e.g., AuthService)
+│   ├── storage/            # MongoDB repository layer
+│   ├── domain/             # Domain models (User, App, etc.)
+│   └── jwt/                # JWT utility functions
+├── go.mod / go.sum         # Dependencies
+```
+
+## Configuration
+
+All settings are loaded from `config/local.yaml`. Example:
+
+```yaml
+env: "local"
+grpc:
+  port: 50051
+mongo:
+  address: "mongodb://localhost:27017"
+token_ttl: "15m"
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Go 1.20+
+- Running MongoDB instance
+- Protobuf compiler (`protoc`) for gRPC
+
+### Installation
+
+```bash
+git clone https://github.com/cosmowake/sso.git
+cd sso
+go mod tidy
+```
+
+### Run the Service
+
+```bash
+go run cmd/sso/main.go --config=./config/local.yaml
+```
+
+### Build Binary
+
+```bash
+go build -o sso ./cmd/sso
+./sso --config=./config/local.yaml
+```
+
+## Testing
+
+Use `grpcurl` or Postman with gRPC support to test the endpoints.
